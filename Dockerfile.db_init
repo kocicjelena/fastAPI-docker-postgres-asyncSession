@@ -1,0 +1,34 @@
+FROM python:3.10
+FROM python:3.10
+
+# WORKDIR /usr/src/app/dbinit
+
+
+# COPY ./requirements.txt /usr/src/app/dbinit/requirements.txt
+# RUN pip install --no-cache-dir --upgrade -r /usr/src/app/dbinit/requirements.txt
+
+
+
+# COPY ./app/core /usr/src/app/dbinit/core
+# ENV MODULE_NAME="core"
+# COPY ./app/dbinit /usr/src/app/dbinit
+# COPY ./alembic /usr/src/app/dbinit/alembic
+# COPY alembic.ini /usr/src/app/dbinit/alembic.ini
+# RUN mkdir -p /usr/src/app/dbinit/alembic/versions
+# CMD cd /usr/src/app/dbinit && python main.py
+WORKDIR /app/db
+
+
+COPY ./requirements.txt /app/db/requirements.txt
+
+
+RUN pip install -r /app/db/requirements.txt
+COPY ./app/core /app/db/core
+ENV MODULE_NAME="core"
+#COPY ./storage/config /app/db/storage/config
+COPY full/dbinit /app/db/dbinit
+COPY alembic /app/db/alembic
+COPY .env /app/db/.env
+COPY alembic.ini /app/db/alembic.ini
+RUN mkdir -p /app/db/alembic/versions
+CMD uvicorn dbinit.main:app --host 0.0.0.0 --port 8001 --reload

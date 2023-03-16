@@ -1,0 +1,21 @@
+FROM python:3.10
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+
+WORKDIR /usr/src/full/fast
+COPY ./requirements.txt /usr/src/full/fast/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /usr/src/full/fast/requirements.txt
+ENV MODULE_NAME="fast"
+
+COPY ./full/core /usr/src/full/core
+#COPY ./static /usr/src/full/static
+COPY .env /usr/src/full/.env
+COPY ./full/fast /usr/src/full/fast
+COPY ./full/__init__.py /usr/src/full/__init__.py
+
+CMD uvicorn fast.main:app --host 0.0.0.0 --port 9000 
+EXPOSE 9000
+
